@@ -1,0 +1,14 @@
+/home/abhigna/Desktop/task2/EmployeeTableApp/bin/Debug/net8.0/EmployeeTableApp
+/home/abhigna/Desktop/task2/EmployeeTableApp/bin/Debug/net8.0/EmployeeTableApp.deps.json
+/home/abhigna/Desktop/task2/EmployeeTableApp/bin/Debug/net8.0/EmployeeTableApp.runtimeconfig.json
+/home/abhigna/Desktop/task2/EmployeeTableApp/bin/Debug/net8.0/EmployeeTableApp.dll
+/home/abhigna/Desktop/task2/EmployeeTableApp/bin/Debug/net8.0/EmployeeTableApp.pdb
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/EmployeeTableApp.GeneratedMSBuildEditorConfig.editorconfig
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/EmployeeTableApp.AssemblyInfoInputs.cache
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/EmployeeTableApp.AssemblyInfo.cs
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/EmployeeTableApp.csproj.CoreCompileInputs.cache
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/EmployeeTableApp.dll
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/refint/EmployeeTableApp.dll
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/EmployeeTableApp.pdb
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/EmployeeTableApp.genruntimeconfig.cache
+/home/abhigna/Desktop/task2/EmployeeTableApp/obj/Debug/net8.0/ref/EmployeeTableApp.dll

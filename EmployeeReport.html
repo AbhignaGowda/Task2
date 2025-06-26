@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Employee Time Tracking Report</title>
+<style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                background: white;
+                border-radius: 15px;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                overflow: hidden;
+            }
+            
+            .header {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                color: white;
+                padding: 30px;
+                text-align: center;
+            }
+            
+            .header h1 {
+                font-size: 2.5em;
+                margin-bottom: 10px;
+                font-weight: 300;
+            }
+            
+            .header .subtitle {
+                opacity: 0.9;
+                font-size: 1.1em;
+            }
+            
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                padding: 30px;
+                background: #f8f9fa;
+            }
+            
+            .stat-card {
+                background: white;
+                padding: 25px;
+                border-radius: 10px;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+                transition: transform 0.3s ease;
+            }
+            
+            .stat-card:hover {
+                transform: translateY(-5px);
+            }
+            
+            .stat-number {
+                font-size: 2.5em;
+                font-weight: bold;
+                color: #2c3e50;
+                margin-bottom: 10px;
+            }
+            
+            .stat-label {
+                color: #7f8c8d;
+                font-size: 0.9em;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+            
+            .table-container {
+                padding: 0 30px 30px 30px;
+            }
+            
+            .search-container {
+                margin-bottom: 20px;
+                position: relative;
+            }
+            
+            .search-input {
+                width: 100%;
+                padding: 15px 50px 15px 20px;
+                border: 2px solid #e0e0e0;
+                border-radius: 25px;
+                font-size: 16px;
+                outline: none;
+                transition: border-color 0.3s ease;
+            }
+            
+            .search-input:focus {
+                border-color: #667eea;
+            }
+            
+            .search-icon {
+                position: absolute;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #999;
+            }
+            
+            .table-wrapper {
+                overflow-x: auto;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            }
+            
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                background: white;
+                min-width: 600px;
+            }
+            
+            th {
+                background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+                color: white;
+                padding: 20px;
+                text-align: left;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                font-size: 0.9em;
+                cursor: pointer;
+                transition: background 0.3s ease;
+            }
+            
+            th:hover {
+                background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            }
+            
+            td {
+                padding: 18px 20px;
+                border-bottom: 1px solid #eee;
+                transition: background-color 0.3s ease;
+            }
+            
+            tr:hover {
+                background-color: #f8f9fa;
+            }
+            
+            .employee-name {
+                font-weight: 600;
+                color: #2c3e50;
+            }
+            
+            .hours-cell {
+                font-weight: 600;
+                color: #27ae60;
+            }
+            
+            .low-hours {
+                background-color: #fff5f5 !important;
+                border-left: 4px solid #e74c3c;
+            }
+            
+            .low-hours .hours-cell {
+                color: #e74c3c;
+            }
+            
+            .high-performer {
+                background-color: #f0fff4 !important;
+                border-left: 4px solid #27ae60;
+            }
+            
+            .rank-badge {
+                display: inline-block;
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                background: #667eea;
+                color: white;
+                text-align: center;
+                line-height: 30px;
+                font-weight: bold;
+                font-size: 0.9em;
+            }
+            
+            .rank-badge.top3 {
+                background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+                color: #333;
+            }
+            
+            .footer {
+                background: #f8f9fa;
+                padding: 20px 30px;
+                text-align: center;
+                color: #7f8c8d;
+                border-top: 1px solid #eee;
+            }
+            
+            .no-results {
+                text-align: center;
+                padding: 40px;
+                color: #7f8c8d;
+                font-style: italic;
+            }
+            
+            @media (max-width: 768px) {
+                .header h1 {
+                    font-size: 2em;
+                }
+                
+                .stats-grid {
+                    grid-template-columns: 1fr;
+                    padding: 20px;
+                }
+                
+                .table-container {
+                    padding: 0 20px 20px 20px;
+                }
+                
+                td, th {
+                    padding: 12px 15px;
+                }
+            }
+        </style>
+</head>
+<body>
+<div class='container'>
+<div class='header'>
+<h1>Employee Time Tracking Report</h1>
+<div class='subtitle'>Generated on June 26, 2025 at 13:57</div>
+</div>
+<div class='stats-grid'>
+<div class='stat-card'><div class='stat-number'>10</div><div class='stat-label'>Total Employees</div></div>
+<div class='stat-card'><div class='stat-number'>1598.5</div><div class='stat-label'>Total Hours</div></div>
+<div class='stat-card'><div class='stat-number'>159.8</div><div class='stat-label'>Average Hours</div></div>
+<div class='stat-card'><div class='stat-number'>212.1</div><div class='stat-label'>Top Performer</div></div>
+</div>
+<div class='table-container'>
+<div class='search-container'>
+<input type='text' class='search-input' id='searchInput' placeholder='Search employees...'>
+<span class='search-icon'>🔍</span>
+</div>
+<div class='table-wrapper'>
+<table id='employeeTable'>
+<thead>
+<tr>
+<th onclick='sortTable(0)'>Rank</th>
+<th onclick='sortTable(1)'>Employee Name</th>
+<th onclick='sortTable(2)'>Total Hours</th>
+<th onclick='sortTable(3)'>Time Entries</th>
+<th onclick='sortTable(4)'>Working Days</th>
+<th onclick='sortTable(5)'>Avg Hours/Day</th>
+</tr>
+</thead>
+<tbody>
+<tr class='high-performer'>
+<td><span class='rank-badge top3'>1</span></td>
+<td class='employee-name'>Patrick Huthinson</td>
+<td class='hours-cell'>212.13</td>
+<td>100</td>
+<td>28</td>
+<td>7.58</td>
+</tr>
+<tr class='high-performer'>
+<td><span class='rank-badge top3'>2</span></td>
+<td class='employee-name'>Abhay Singh</td>
+<td class='hours-cell'>207.65</td>
+<td>99</td>
+<td>28</td>
+<td>7.42</td>
+</tr>
+<tr class='high-performer'>
+<td><span class='rank-badge top3'>3</span></td>
+<td class='employee-name'>Stewart Malachi</td>
+<td class='hours-cell'>197.83</td>
+<td>92</td>
+<td>28</td>
+<td>7.07</td>
+</tr>
+<tr class=''>
+<td><span class='rank-badge'>4</span></td>
+<td class='employee-name'>John Black</td>
+<td class='hours-cell'>197.02</td>
+<td>94</td>
+<td>28</td>
+<td>7.04</td>
+</tr>
+<tr class=''>
+<td><span class='rank-badge'>5</span></td>
+<td class='employee-name'>Mary Poppins</td>
+<td class='hours-cell'>167.92</td>
+<td>80</td>
+<td>28</td>
+<td>6</td>
+</tr>
+<tr class=''>
+<td><span class='rank-badge'>6</span></td>
+<td class='employee-name'>Tim Perkinson</td>
+<td class='hours-cell'>163.17</td>
+<td>76</td>
+<td>28</td>
+<td>5.83</td>
+</tr>
+<tr class=''>
+<td><span class='rank-badge'>7</span></td>
+<td class='employee-name'>Kavvay Verma</td>
+<td class='hours-cell'>158.12</td>
+<td>74</td>
+<td>28</td>
+<td>5.65</td>
+</tr>
+<tr class=''>
+<td><span class='rank-badge'>8</span></td>
+<td class='employee-name'>Rita Alley</td>
+<td class='hours-cell'>112.18</td>
+<td>50</td>
+<td>28</td>
+<td>4.01</td>
+</tr>
+<tr class='low-hours'>
+<td><span class='rank-badge'>9</span></td>
+<td class='employee-name'>Raju Sunuwar</td>
+<td class='hours-cell'>95.67</td>
+<td>40</td>
+<td>27</td>
+<td>3.54</td>
+</tr>
+<tr class='low-hours'>
+<td><span class='rank-badge'>10</span></td>
+<td class='employee-name'>Tamoy Smith</td>
+<td class='hours-cell'>86.78</td>
+<td>43</td>
+<td>27</td>
+<td>3.21</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class='footer'>
+Employee Time Tracking System | Data processed and secured
+</div>
+</div>
+<script>
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('keyup', function() {
+                const searchTerm = this.value.toLowerCase();
+                const table = document.getElementById('employeeTable');
+                const rows = table.getElementsByTagName('tr');
+                
+                for (let i = 1; i < rows.length; i++) {
+                    const employeeName = rows[i].getElementsByTagName('td')[1].textContent.toLowerCase();
+                    if (employeeName.includes(searchTerm)) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            });
+            
+            // Sort functionality
+            function sortTable(columnIndex) {
+                const table = document.getElementById('employeeTable');
+                const tbody = table.getElementsByTagName('tbody')[0];
+                const rows = Array.from(tbody.getElementsByTagName('tr'));
+                
+                rows.sort((a, b) => {
+                    let aValue = a.getElementsByTagName('td')[columnIndex].textContent;
+                    let bValue = b.getElementsByTagName('td')[columnIndex].textContent;
+                    
+                    // Handle numeric columns
+                    if (columnIndex >= 2) {
+                        aValue = parseFloat(aValue) || 0;
+                        bValue = parseFloat(bValue) || 0;
+                        return bValue - aValue;
+                    }
+                    
+                    // Handle text columns
+                    return aValue.localeCompare(bValue);
+                });
+                
+                // Re-append sorted rows
+                rows.forEach(row => tbody.appendChild(row));
+                
+                // Update rank numbers
+                rows.forEach((row, index) => {
+                    const rankCell = row.getElementsByTagName('td')[0];
+                    const rankBadge = rankCell.querySelector('.rank-badge');
+                    if (rankBadge) {
+                        rankBadge.textContent = index + 1;
+                        rankBadge.className = (index < 3) ? 'rank-badge top3' : 'rank-badge';
+                    }
+                });
+            }
+            
+            // Add loading animation on page load
+            window.addEventListener('load', function() {
+                document.body.style.opacity = '0';
+                document.body.style.transition = 'opacity 0.5s ease-in-out';
+                setTimeout(() => {
+                    document.body.style.opacity = '1';
+                }, 100);
+            });
+        </script>
+</body>
+</html>
