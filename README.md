@@ -44,6 +44,9 @@ Only valid, non-deleted entries are considered for total hours calculation.
 - [.NET 6.0 or newer](https://dotnet.microsoft.com/download) installed  
 
 ### Steps
+### Output
+![Screenshot from 2025-06-30 17-55-25](https://github.com/user-attachments/assets/1df73ecb-72bf-42e4-9fde-ff48b94db666)
+![Screenshot from 2025-06-30 17-55-35](https://github.com/user-attachments/assets/430f88f6-889d-48ba-bf70-fb12cce260fe)
 
 1. Clone the repository:
 
